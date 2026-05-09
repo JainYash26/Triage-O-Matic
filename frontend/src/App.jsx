@@ -1,5 +1,8 @@
 import { useState } from "react";
+<<<<<<< HEAD
 import { useEffect } from "react";
+=======
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import LandingPage from "./pages/LandingPage";
@@ -9,7 +12,10 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import "./styles.css";
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 // --- The Route Guard Component ---
 // If the user isn't logged in, kick them back to the login page!
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -25,9 +31,14 @@ export default function App() {
   
   // Fake authentication state (defaults to false so the app is locked!)
   // Check if they already have a token saved in their browser
+<<<<<<< HEAD
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return !!localStorage.getItem("token");
   });
+=======
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
   const addBlock = (block) => {
     setChain((prev) => [...prev, block]);
   };
@@ -65,9 +76,13 @@ export default function App() {
 
 // Redirects to FastAPI's auto-generated docs
 function DocsRedirect() {
+<<<<<<< HEAD
   useEffect(() => {
     window.location.href = "http://localhost:8000/docs";
   }, []);
 
+=======
+  window.location.href = "http://localhost:8000/docs";
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
   return <p>Redirecting to API docs…</p>;
 }

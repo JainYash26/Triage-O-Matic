@@ -14,7 +14,10 @@ from models import LogInput, AnalyzeResponse, AuditBlock, UserCreate, UserLogin,
 from analyzer import analyze_log
 from audit_chain import build_block, verify_chain, GENESIS_HASH
 from database import init_db, insert_block, load_chain, count_blocks, get_user_by_email, create_user
+<<<<<<< HEAD
 from parser import parse_input
+=======
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 
 # --- Security Configuration ---
 SECRET_KEY = os.environ.get("JWT_SECRET", "super-secret-key-change-in-production")
@@ -92,6 +95,7 @@ def analyze(payload: LogInput):
     if not key:
         raise HTTPException(status_code=500, detail="GROQ_API_KEY not set.")
     try:
+<<<<<<< HEAD
         parsed_data = parse_input(payload.data)  
 
         # If user uploads multiple logs (array / bulk)
@@ -106,6 +110,9 @@ def analyze(payload: LogInput):
 
             analysis = analyze_log(parsed_data)
 
+=======
+        analysis = analyze_log(payload.data) 
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI analysis failed: {str(e)}")
 

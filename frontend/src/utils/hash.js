@@ -9,7 +9,10 @@ export async function sha256(message) {
 }
 
 export function shortHash(hash = "") {
+<<<<<<< HEAD
   //return hash.slice(0, 8) + "…" + hash.slice(-8);
   if (!hash) return "—";
+=======
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
   return hash.slice(0, 8) + "…" + hash.slice(-8);
 }

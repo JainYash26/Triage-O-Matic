@@ -21,9 +21,13 @@ export default function AnalyzePage({ onNewBlock }) {
     setLoading(true);
     setError(null);
     setAnalysis(null);
+<<<<<<< HEAD
     console.log("Analyzing input:", logData);
     sessionStorage.removeItem("currentAnalysis"); // Clear the old data
     
+=======
+    sessionStorage.removeItem("currentAnalysis"); // Clear the old data
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 
     try {
       const result = await api.analyze(logData);
@@ -51,6 +55,7 @@ export default function AnalyzePage({ onNewBlock }) {
       <div className="right-panel">
         {error && <div className="error-banner">{error}</div>}
         {loading && <Spinner />}
+<<<<<<< HEAD
         {!loading && analysis && analysis.length > 0 && (
           <AnalysisView analysis={analysis} />
         )}
@@ -60,6 +65,9 @@ export default function AnalyzePage({ onNewBlock }) {
             <p>No threats detected 🎉</p>
           </div>
         )}
+=======
+        {!loading && analysis && <AnalysisView analysis={analysis} />}
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
         {!loading && !analysis && !error && <EmptyAnalysis />}
       </div>
     </div>

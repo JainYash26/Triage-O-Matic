@@ -14,16 +14,23 @@ def compute_data_hash(input_data, analysis):
     # Dump each Pydantic model inside the list
     analysis_dump = [a.model_dump() for a in analysis] if isinstance(analysis, list) else analysis.model_dump()
     
+<<<<<<< HEAD
     if isinstance(input_data, str):
         input_data = input_data.strip()
 
 
+=======
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
     payload = {
         "input_data": input_data,
         "analysis": analysis_dump
     }
     
+<<<<<<< HEAD
     return _sha256(json.dumps(payload, sort_keys=True, default=str))
+=======
+    return _sha256(json.dumps(payload, sort_keys=True))
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 
 
 def compute_block_hash(previous_hash: str, data_hash: str) -> str:
@@ -34,8 +41,13 @@ def compute_block_hash(previous_hash: str, data_hash: str) -> str:
 def build_block(
     block_id: int,
     previous_hash: str,
+<<<<<<< HEAD
     input_data: any,
     analysis: list[AnalysisResult],
+=======
+    input_data: dict,
+    analysis: AnalysisResult,
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 ) -> AuditBlock:
     data_hash  = compute_data_hash(input_data, analysis)
     block_hash = compute_block_hash(previous_hash, data_hash)

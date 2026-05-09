@@ -47,6 +47,7 @@ If the traffic is 100% healthy, return an empty array for "threats".
   ]
 }}"""
 
+<<<<<<< HEAD
 def analyze_log(log_data) -> list[AnalysisResult]:
     api_key = os.environ.get("GROQ_API_KEY", GROQ_API_KEY)
     # --- NEW: Support ALL input formats (text, CSV, logs, JSON) ---
@@ -56,6 +57,10 @@ def analyze_log(log_data) -> list[AnalysisResult]:
             "raw_logs": log_data,
             "format": "unstructured_log_text"
         }
+=======
+def analyze_log(log_data: dict) -> list[AnalysisResult]:
+    api_key = os.environ.get("GROQ_API_KEY", GROQ_API_KEY)
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 
     if not api_key:
         raise RuntimeError("GROQ_API_KEY is not set.")
@@ -97,10 +102,14 @@ def analyze_log(log_data) -> list[AnalysisResult]:
     if "{" in raw:
         raw = raw[raw.index("{"):raw.rindex("}")+1]
 
+<<<<<<< HEAD
     try:
         parsed = json.loads(raw)
     except json.JSONDecodeError:
         raise RuntimeError(f"Invalid JSON from AI: {raw}")
+=======
+    parsed = json.loads(raw)
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
     
     # Extract the list of threats from the AI's JSON response
     threats_list = parsed.get("threats", [])

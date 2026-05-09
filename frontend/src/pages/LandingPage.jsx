@@ -32,17 +32,30 @@ export default function LandingPage() {
 
         <div className="features-grid">
           <div className="feature-card">
+<<<<<<< HEAD
             <div className="feature-icon"></div>
             <h3>Automated AI Analysis</h3>
             <p>Paste logs in any format — raw text, JSON, CSV, or system logs. The AI intelligently filters out healthy noise and extracts critical threats in milliseconds.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon"></div>
+=======
+            <div className="feature-icon">🧠</div>
+            <h3>Automated AI Analysis</h3>
+            <p>Paste raw JSON arrays containing mixed network traffic. The AI intelligently filters out healthy noise and extracts critical threats in milliseconds.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">⛓️</div>
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
             <h3>Immutable Audit Log</h3>
             <p>Every analysis is hashed using SHA-256 and cryptographically chained to the previous event. Your threat intelligence data cannot be tampered with or retroactively altered.</p>
           </div>
           <div className="feature-card">
+<<<<<<< HEAD
             <div className="feature-icon"></div>
+=======
+            <div className="feature-icon">🛡️</div>
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
             <h3>Zero-Trust Security</h3>
             <p>Designed for modern defense. All data is processed locally and stored in a secure SQLite vault, ensuring complete visibility and accountability.</p>
           </div>

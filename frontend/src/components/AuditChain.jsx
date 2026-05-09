@@ -43,6 +43,7 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
         }
 
         // Handle array inputs for the preview subtitle
+<<<<<<< HEAD
         let previewText = "";
 
           if (typeof block.input_data === "string") {
@@ -52,6 +53,11 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
           } else {
             previewText = JSON.stringify(block.input_data).slice(0, 60);
           }
+=======
+        const firstLog = Array.isArray(block.input_data) ? block.input_data[0] : block.input_data;
+        const sourceIp = firstLog?.source_ip || "?";
+        const destIp = firstLog?.destination_ip || "?";
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 
         const isOpen = expanded === block.id;
 
@@ -66,6 +72,7 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
                 <div className="block-meta">
                   <p className="block-attack">{displayTitle}</p>
                   <p className="block-sub mono">
+<<<<<<< HEAD
                   {previewText}
                   {Array.isArray(block.input_data) && block.input_data.length > 1
                     ? ` (+${block.input_data.length - 1} more logs)`
@@ -73,6 +80,11 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
                   {" · "}
                   {block.timestamp?.replace("T"," ").split(".")[0]} UTC
                 </p>
+=======
+                    {sourceIp} → {destIp} {Array.isArray(block.input_data) && block.input_data.length > 1 ? `(+${block.input_data.length - 1} more logs)` : ""} ·{" "}
+                    {block.timestamp?.replace("T"," ").split(".")[0]} UTC
+                  </p>
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
                 </div>
                 <span className={`badge ${sevClass}`}>{displaySeverity}</span>
                 <span className="chevron">{isOpen ? "▲" : "▼"}</span>
@@ -95,6 +107,7 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
                   <p className="section-label" style={{ marginTop: 16 }}>Full audit record</p>
                   <pre className="json-pre">
                     {JSON.stringify({
+<<<<<<< HEAD
                       block_id: block.id,
                       timestamp: block.timestamp,
                       previous_hash: block.previous_hash,
@@ -105,6 +118,14 @@ export default function AuditChain({ chain = [], chainIntact = true }) {
                           ? block.input_data.slice(0, 500)
                           : block.input_data,
                       analysis: block.analysis,
+=======
+                      block_id:      block.id,
+                      timestamp:     block.timestamp,
+                      previous_hash: block.previous_hash,
+                      data_hash:     block.data_hash,
+                      block_hash:    block.block_hash,
+                      analysis:      block.analysis,
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
                     }, null, 2)}
                   </pre>
                 </div>

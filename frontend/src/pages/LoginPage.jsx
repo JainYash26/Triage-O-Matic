@@ -77,7 +77,11 @@ export default function LoginPage({ onLogin }) {
         </form>
 
         <p className="auth-footer">
+<<<<<<< HEAD
           Don't have an account? <Link to="/signup">Create Account</Link>
+=======
+          Don't have an account? <Link to="/signup">Request Access</Link>
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
         </p>
       </div>
     </div>

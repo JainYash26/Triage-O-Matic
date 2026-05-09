@@ -13,6 +13,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+<<<<<<< HEAD
   health: () => request("/health"),
 
   analyze: (data) => {
@@ -29,4 +30,11 @@ export const api = {
   getChain: () => request("/audit-chain"),
   getBlock: (id) => request(`/audit-chain/${id}`),
   verifyChain: () => request("/audit-chain/verify"),
+=======
+  health:      ()           => request("/health"),
+  analyze:     (data)       => request("/analyze", { method: "POST", body: JSON.stringify({ data }) }),
+  getChain:    ()           => request("/audit-chain"),
+  getBlock:    (id)         => request(`/audit-chain/${id}`),
+  verifyChain: ()           => request("/audit-chain/verify"),
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
 };

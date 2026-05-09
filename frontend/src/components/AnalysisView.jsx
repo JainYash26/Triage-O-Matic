@@ -37,13 +37,21 @@ export default function AnalysisView({ analysis }) {
             <div className="metrics-grid">
               <MetricCard label="Confidence"    value={threat.confidence} />
               <MetricCard label="MITRE ATT&CK"  value={threat.mitre_attack || "N/A"} mono />
+<<<<<<< HEAD
               <MetricCard label="Rule Matched"  value={threat.rule_matched || "N/A"} mono />
+=======
+              <MetricCard label="Rule Matched"  value={threat.rule_matched} mono />
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
               <MetricCard label="Severity"      value={threat.severity} className={sevClass} />
             </div>
 
             {/* Attack vector */}
             <Section label="Attack Vector">
+<<<<<<< HEAD
               <p className="body-text">{threat.attack_vector || "Not available"}</p>
+=======
+              <p className="body-text">{threat.attack_vector}</p>
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
             </Section>
 
             {/* Two-column grid */}
@@ -52,7 +60,11 @@ export default function AnalysisView({ analysis }) {
                 <BulletList items={threat.indicators} accent="danger" />
               </Section>
               <Section label="Affected Systems">
+<<<<<<< HEAD
                 {(threat.affected_systems || []).map((s, i) => (
+=======
+                {threat.affected_systems.map((s, i) => (
+>>>>>>> 33aeb1f989947c36c4405a9299e8bf0e6738a7f3
                   <div key={i} className="tag">{s}</div>
                 ))}
               </Section>

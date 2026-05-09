@@ -1,6 +1,6 @@
-# CyberGuard AI
+# CyberGuard AI (Triage-O-Matic SIEM)
 
-AI-powered network threat detection with tamper-proof hash-chained audit logs.
+An enterprise-ready, AI-powered network threat detection SIEM. Features include a tamper-proof cryptographic audit chain, stateless JWT authentication, visual threat dashboards, and fully observable LLM pipelines powered by LLaMA-3, LangChain, and LangSmith.
 
 ---
 
@@ -9,25 +9,29 @@ AI-powered network threat detection with tamper-proof hash-chained audit logs.
 ```
 cyberguard/
 ├── backend/                   FastAPI (Python)
-│   ├── main.py                Routes: /analyze  /audit-chain  /health
-│   ├── analyzer.py            Claude AI threat analysis
+│   ├── main.py                Routes: /login /register /analyze-file /audit-chain /audit-chain/{id} /audit-chain/verify /health
+│   ├── analyzer.py            LangChain + Groq (LLaMA-3) threat analysis
 │   ├── audit_chain.py         SHA-256 hash chain builder + verifier
-│   ├── database.py            SQLite persistence (swap for PostgreSQL)
-│   ├── models.py              Pydantic data models
+│   ├── database.py            SQLite persistence (Users + Audit Blocks)
+│   ├── models.py              Pydantic data models (Validation)
+│   ├── parser.py              Log ingestion parser (handles CSV/TXT/JSON fallbacks)
 │   ├── requirements.txt
 │   └── Dockerfile
 │
 ├── frontend/                  React + Vite
 │   ├── src/
-│   │   ├── App.jsx            Router + shared state
-│   │   ├── api/client.js      All HTTP calls to backend
+│   │   ├── App.jsx            React Router + protected routes
+│   │   ├── api/client.js      HTTP calls & JWT bearer token injection
 │   │   ├── utils/hash.js      SHA-256 client utilities
 │   │   ├── components/
 │   │   │   ├── Header.jsx
-│   │   │   ├── LogInput.jsx
-│   │   │   ├── AnalysisView.jsx
-│   │   │   └── AuditChain.jsx
+│   │   │   ├── LogInput.jsx     (Drag & Drop log ingestion)
+│   │   │   ├── AnalysisView.jsx (Recharts Threat Dashboard)
+│   │   │   └── AuditChain.jsx   (Cryptographic ledger UI)
 │   │   └── pages/
+│   │       ├── LandingPage.jsx
+│   │       ├── LoginPage.jsx
+│   │       ├── SignupPage.jsx
 │   │       ├── AnalyzePage.jsx
 │   │       └── ChainPage.jsx
 │   ├── index.html
@@ -35,25 +39,40 @@ cyberguard/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── docker-compose.yml         One-command start for everything
+├── docker-compose.yml         Isolated multi-container orchestration
 ├── .env.example
 └── README.md
 ```
 
 ---
 
-## Quick start (Docker — recommended)
+## Core Features
+
+- **Observable AI Inference**: Utilizes LangChain to enforce strict Pydantic JSON schemas and LangSmith for full trace visibility, token tracking, and latency monitoring.
+- **Cryptographic Ledger**: Every AI analysis is hashed alongside the raw input using SHA-256 and chained to the previous block, creating a 100% tamper-evident database.
+- **Zero-Trust Authentication**: Stateless session management via PyJWT, with user credentials securely salted and hashed using bcrypt and passlib.
+- **Token-Aware Ingestion**: Drag-and-drop `.csv`, `.txt`, or `.json` log files. The Python backend safely parses and truncates massive logs (keeping the most recent 150 events) to protect the LLM context window.
+- **Visual Threat Dashboard**: Interactive Recharts-powered UI mapping out critical, high, and medium severity threats dynamically from the AI's JSON output.
+
+---
+
+## Quick Start (Docker — Recommended)
 
 ```bash
 # 1. Clone and enter
 git clone https://github.com/yourname/cyberguard.git
 cd cyberguard
 
-# 2. Set your API key
+# 2. Set your environment variables
 cp .env.example .env
-# Edit .env and paste: ANTHROPIC_API_KEY=sk-ant-xxxxx
 
-# 3. Build and start both services
+# Edit .env and paste:
+# GROQ_API_KEY=gsk_your_groq_key_here
+# LANGCHAIN_TRACING_V2=true
+# LANGCHAIN_API_KEY=lsv2_pt_your_langsmith_key_here
+# LANGCHAIN_PROJECT=CyberGuard-SIEM
+
+# 3. Build and start both isolated containers
 docker compose up --build
 
 # App:      http://localhost:5173
@@ -62,7 +81,7 @@ docker compose up --build
 
 ---
 
-## Manual setup (no Docker)
+## Manual Setup (No Docker)
 
 ### Backend
 
@@ -73,7 +92,7 @@ source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 cp .env.example .env
-# Add your ANTHROPIC_API_KEY to .env
+# Add your GROQ_API_KEY and LANGCHAIN_API_KEY to .env
 
 uvicorn main:app --reload
 # Runs on http://localhost:8000
@@ -90,54 +109,25 @@ npm run dev
 
 ---
 
-## API reference
+## API Reference
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check + block count |
-| POST | `/analyze` | Analyze a log, store block |
-| GET | `/audit-chain` | List all audit blocks |
-| GET | `/audit-chain/{id}` | Get single block |
-| GET | `/audit-chain/verify` | Verify chain integrity |
-
-**POST /analyze — example request:**
-```json
-{
-  "data": {
-    "timestamp": "2024-01-15T14:23:45Z",
-    "source_ip": "192.168.1.105",
-    "destination_ip": "10.0.0.1",
-    "protocol": "TCP",
-    "destination_port": 22,
-    "failed_attempts": 1203
-  }
-}
-```
+| Method | Path | Description | Authentication |
+|--------|------|-------------|----------------|
+| POST | `/register` | Create a new user account | None |
+| POST | `/login` | Authenticate and receive JWT | None |
+| GET | `/health` | Health check + block count | None |
+| POST | `/analyze-file` | Upload `.csv`/`.txt`/`.json` log for AI analysis | Required (JWT) |
+| GET | `/audit-chain` | List all cryptographic audit blocks | Required (JWT) |
+| GET | `/audit-chain/{id}` | Get single block details | Required (JWT) |
+| GET | `/audit-chain/verify` | Verify blockchain integrity | Required (JWT) |
 
 ---
 
-## Production deployment
+## Production Deployment
 
-### Backend → Render / Railway
+### Scaling to PostgreSQL
 
-1. Push `backend/` folder to a GitHub repo
-2. Create a new **Web Service** on Render
-3. Set environment variables:
-   - `ANTHROPIC_API_KEY` = your key
-   - `FRONTEND_URL` = https://your-frontend.vercel.app
-   - `DB_PATH` = `/data/cyberguard.db`
-4. Add a **Disk** volume mounted at `/data` (for SQLite persistence)
-5. Build command: `pip install -r requirements.txt`
-6. Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-
-### Frontend → Vercel / Netlify
-
-1. Push `frontend/` to GitHub
-2. Import repo on Vercel
-3. Set env var: `VITE_API_URL` = https://your-backend.render.com
-4. Deploy — Vercel auto-detects Vite
-
-### Switching to PostgreSQL
+The current architecture uses SQLite mapped to a Docker volume (`/data/cyberguard.db`) for portability. For enterprise scaling and horizontal concurrency, the system is designed to hot-swap to PostgreSQL.
 
 In `database.py`, uncomment the PostgreSQL block at the bottom:
 
@@ -155,19 +145,14 @@ Then `pip install psycopg2-binary` and set `DATABASE_URL` in your environment.
 
 ---
 
-## How the hash chain works
+## How the Cryptographic Hash Chain Works
 
-Each block stores:
-- `data_hash` = SHA-256(input_log + AI_analysis)
-- `previous_hash` = block_hash of the block before it
-- `block_hash` = SHA-256(previous_hash + data_hash)
+To prevent malicious insiders from altering log history, each block stores:
 
-Changing any past entry changes its `data_hash`, which changes its `block_hash`,
-which breaks every block that follows it. The `/audit-chain/verify` endpoint
-detects this instantly.
+```
+data_hash     = SHA-256(raw_input_log + AI_threat_analysis)
+previous_hash = block_hash of the block before it
+block_hash    = SHA-256(previous_hash + data_hash)
+```
 
----
-
-## License
-
-MIT
+Altering a past record in the database changes its `data_hash`, which cascades and invalidates the `block_hash` of every subsequent entry. The frontend instantly flags the breach via the `/audit-chain/verify` endpoint.
